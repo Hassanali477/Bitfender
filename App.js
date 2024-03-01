@@ -20,7 +20,7 @@ function App() {
     <>
       <StatusBar backgroundColor={'black'} />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={null}>
+        <Stack.Navigator initialRouteName={'Home'}>
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}

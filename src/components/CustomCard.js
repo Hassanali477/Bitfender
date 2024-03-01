@@ -17,7 +17,7 @@ const CustomCard = ({navigation}) => {
         <TouchableOpacity onPress={() => navigation.navigate('CreateScreen')}>
           <View style={[styles.card1, {width: 390}]}>
             <View>
-              <Text style={{color: 'white',fontSize:20,fontWeight:'600',letterSpacing:2.5}}>Create Request</Text>
+              <Text style={{color:'white',fontSize:20,fontWeight:'600',letterSpacing:2.5}}>Create Request</Text>
             </View>
           </View>
         </TouchableOpacity>

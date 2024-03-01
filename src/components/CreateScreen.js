@@ -131,6 +131,7 @@ const CreateScreen = props => {
             value={contactNo}
             onChangeText={setContactNo}
             keyboardType="numeric"
+            maxLength={11}
           />
           <TextInput
             style={styles.input}

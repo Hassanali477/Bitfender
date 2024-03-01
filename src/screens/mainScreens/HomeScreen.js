@@ -19,23 +19,6 @@ const HomeScreen = props => {
   const additionalData = props.route.params?.additionalData;
 
   return (
-     
-    // </>
-    // <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-    //   <Text style={{color: 'black'}}>Hassan</Text>
-    //   {additionalData ? (
-    //     <>
-    //       <Text style={{color: 'black'}}>
-    //         Name: Hassan {additionalData.name}
-    //       </Text>F
-    //       <Text>Email: {additionalData.email}</Text>
-    //       <Text>Contact No: {additionalData.contactNo}</Text>
-    //       <Text>Department: {additionalData.department}</Text>
-    //     </>
-    //   ) : (
-    //     <Text>Welcome to HomeScreen</Text>
-    //   )}
-    // </View>
     <View style={styles.container}>
       <Header />
       <CustomCard navigation={props.navigation} />

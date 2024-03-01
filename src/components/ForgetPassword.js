@@ -47,7 +47,7 @@ const ForgetPassword = props => {
         Alert.alert('Error', 'Failed to initiate password reset process.');
       }
     } catch (error) {
-      if (error.response.status === 404) {
+      if (error.response && error.response.status === 404) {
         Alert.alert('Error', 'User not found. Please check your email.');
       } else {
         Alert.alert('Error', 'User not exist.');

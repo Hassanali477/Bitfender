@@ -47,7 +47,6 @@ const Login = props => {
         const token = response.data.token;
         console.log(token, 'checking');
         const user = response.data.userData;
-        console.log(user, 'user checking');
         if (user && user.name) {
           var {actions} = props;
           actions.userToken(token);
