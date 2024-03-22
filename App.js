@@ -20,7 +20,7 @@ function App() {
     <>
       <StatusBar backgroundColor={'black'} />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName={'Home'}>
+        <Stack.Navigator initialRouteName={null}>
           <Stack.Screen
             name="SplashScreen"
             component={SplashScreen}
@@ -67,7 +67,7 @@ function App() {
             options={{headerShown: false}}
           />
           {/* <Stack.Screen
-            name="ResetPasswordScreen"
+            name="Reset-Password-Screen"
             component={ResetPasswordScreen}
             options={{headerShown: false}}
           /> */}

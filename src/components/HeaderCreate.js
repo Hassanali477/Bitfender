@@ -6,7 +6,7 @@ const HeaderCreate = ({navigation}) => {
   return (
     <View style={styles.container}>
       {/* Status bar */}
-      <StatusBar backgroundColor="#EE5C25" barStyle="dark-content" />
+      {/* <StatusBar backgroundColor="#EE5C25" barStyle="dark-content" /> */}
 
       {/* Custom header */}
       <View style={styles.header}>

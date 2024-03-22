@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import axios from 'axios';
 import {Icon} from 'react-native-elements';
@@ -18,6 +19,7 @@ import {Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import * as userActions from '../../src/redux/actions/user';
 import {bindActionCreators} from 'redux';
+import {ScrollView} from 'react-native';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -43,6 +45,7 @@ const ForgetPassword = props => {
           'Success',
           'Password reset instructions sent to your email.',
         );
+        props.navigation.navigate('Reset-Password-Screen');
       } else {
         Alert.alert('Error', 'Failed to initiate password reset process.');
       }
@@ -55,67 +58,58 @@ const ForgetPassword = props => {
     }
   };
   return (
-    <View style={styles.container}>
-      <View>
-        <Image
-          source={require('../../src/Assets/images/launch_screen.jpg')}
-          style={{height: 150, width: 200}}
-          resizeMode="contain"
-        />
-      </View>
-      <Text style={styles.headText}>Forget Password</Text>
-      <View style={styles.textInputContainer}>
-        <View
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-          <Icon
-            type="material"
-            name="mail"
-            color={'#fafad2'}
-            size={28}
-            iconStyle={{marginRight: 10}}
-          />
-          <TextInput
-            placeholder="Email"
-            style={styles.textInput1}
-            placeholderTextColor={'white'}
-            value={email}
-            onChangeText={setEmail}
+    <ScrollView contentContainerStyle={{paddingBottom: '20%'}}>
+      <View style={styles.container}>
+        <View style={{marginTop: 100}}>
+          <Image
+            source={require('../../src/Assets/images/launch_screen.jpg')}
+            style={{height: 150, width: 200}}
+            resizeMode="contain"
           />
         </View>
+        <Text style={styles.headText}>Forget Password</Text>
+        <Text style={styles.headText1}>
+          Enter your email below to reset your password.
+        </Text>
+        <View style={styles.textInputContainer}>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Icon
+              type="material"
+              name="mail"
+              color={'black'}
+              size={28}
+              iconStyle={{marginRight: 10}}
+            />
+            <TextInput
+              placeholder="Email"
+              style={styles.textInput1}
+              placeholderTextColor={'black'}
+              value={email}
+              onChangeText={text => setEmail(text)}
+            />
+          </View>
+        </View>
+        <View
+          style={{
+            flexDirection: 'column',
+            alignItems: 'center',
+            alignSelf: 'flex-end',
+            marginTop: 20,
+            marginRight: 10,
+          }}>
+          <TouchableOpacity
+            style={[styles.buttonContainer]}
+            onPress={() => handleForgotPassword()}>
+            <Text style={styles.button1}>Continue</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          alignSelf: 'flex-end',
-          marginTop: 20,
-          marginLeft: 30,
-        }}>
-        {/* <TouchableOpacity
-          style={[
-            styles.buttonContainer,
-            {backgroundColor: '#EE5C25', borderWidth: 1, width: 160, marginTop:20},
-          ]}>
-          <Text style={[styles.button1, {fontWeight: '300'}]}>
-            Forget passwrod ?
-          </Text>
-        </TouchableOpacity> */}
-        <TouchableOpacity
-          style={[styles.buttonContainer, {marginLeft: 10}]}
-          onPress={() => handleForgotPassword()}>
-          <Text style={styles.button1}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-      {/* <View style={styles.text1}>
-        <Text style={styles.text2}>New on A2Z BIT PORTAL?</Text>
-        <TouchableOpacity onPress={() => props.navigation.navigate('SignUp')}>
-          <Text style={styles.createBtn}>Create an account</Text>
-        </TouchableOpacity>
-      </View> */}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -136,11 +130,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(ForgetPassword);
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#EE5C25',
+    // flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    height: height,
     width: width,
   },
   headText: {
@@ -148,8 +139,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     letterSpacing: 1,
     color: 'black',
+    marginTop: 35,
+  },
+  headText1: {
+    fontSize: 15,
+    letterSpacing: 1,
+    color: 'black',
     marginBottom: 25,
-    marginTop: 30,
+    marginTop: 10,
   },
   textInput1: {
     borderColor: 'black',
@@ -157,10 +154,9 @@ const styles = StyleSheet.create({
     width: 330,
     borderRadius: 5,
     padding: 10,
-    // marginBottom: 25,
-    fontWeight: '300',
+    fontWeight: '400',
     marginRight: 10,
-    // marginBottom:50
+    color: 'black',
   },
   textInput2: {
     borderColor: 'black',
@@ -177,17 +173,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     borderRadius: 10,
     padding: 10,
-    marginLeft: 140,
-    // alignSelf: 'flex-end',
-    width: 90,
-    marginRight: 35,
-    marginTop: 20,
-    marginBottom: 120,
+    marginRight: 15,
+    width: 100,
   },
   button1: {
     fontSize: 16,
     alignSelf: 'center',
-    fontWeight: '700',
+    fontWeight: '400',
     color: 'white',
   },
   text1: {

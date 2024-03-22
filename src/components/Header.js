@@ -1,34 +1,72 @@
 import React from 'react';
-import {View, Text, StyleSheet, StatusBar} from 'react-native';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {Icon} from 'react-native-elements';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import * as userActions from '../redux/actions/user';
+import {useNavigation} from '@react-navigation/native'; // Import useNavigation hook
 
-const Header = () => {
+const Header = props => {
+  const navigation = useNavigation(); // Initialize useNavigation hook
+
+  const handleLogout = () => {
+    // Dispatch action to reset user data in Redux state to null
+    props.actions.user(null);
+    // Navigate to login screen
+    navigation.navigate('Login');
+  };
+
   return (
     <View style={styles.container}>
-      {/* Status bar */}
-      <StatusBar backgroundColor="#EE5C25" barStyle="dark-content" />
-
-      {/* Custom header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>HOME BIT PORTAL</Text>
+        <TouchableOpacity onPress={handleLogout}>
+          <View style={styles.iconContainer}>
+            <Icon
+              type="material-community"
+              name="logout"
+              color={'white'}
+              size={30}
+              style={{marginLeft: 25}}
+            />
+          </View>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
-export default Header;
+
+const mapStateToProps = state => ({
+  userData: state.userData,
+});
+
+const mapDispatchToProps = dispatch => ({
+  actions: bindActionCreators(userActions, dispatch),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
+
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#EE5C25',
   },
   header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    // justifyContent: 'space-between',
     height: 75,
     backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
+    paddingHorizontal: 10,
   },
   headerText: {
     fontSize: 22,
     fontWeight: 'bold',
-    letterSpacing:5,
+    letterSpacing: 5,
     color: 'white',
+    textAlign: 'center',
+    marginLeft: 60,
+  },
+  iconContainer: {
+    padding: 10,
   },
 });

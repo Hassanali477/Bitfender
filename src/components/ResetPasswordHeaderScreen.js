@@ -8,10 +8,9 @@ const ResetPasswordHeaderScreen = props => {
       <View
         style={{
           flexDirection: 'row',
-          // flex:1,
           alignItems: 'center',
           backgroundColor: 'black',
-          // justifyContent:'center'
+          height:70,
         }}>
         <TouchableOpacity onPress={() => props.navigation.navigate('ForgetPassword')}>
           <Icon
@@ -48,13 +47,5 @@ const ResetPasswordHeaderScreen = props => {
 export default ResetPasswordHeaderScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    // flex:1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 70,
-    // justifyContent: 'center',
-    backgroundColor: 'black',
-    width: '100%',
-  },
+
 });

@@ -105,21 +105,21 @@ const CreateScreen = props => {
           <TextInput
             style={styles.input}
             placeholder="Product Name"
-            placeholderTextColor={'black'}
+            placeholderTextColor={'#ccc'}
             value={productName}
             onChangeText={setProductName}
           />
           <TextInput
             style={styles.input}
             placeholder="Client Name"
-            placeholderTextColor={'black'}
+            placeholderTextColor={'#ccc'}
             value={clientName}
             onChangeText={setClientName}
           />
           <TextInput
             style={styles.input}
             placeholder="Number of Users"
-            placeholderTextColor={'black'}
+            placeholderTextColor={'#ccc'}
             value={numberOfUsers}
             onChangeText={setNumberOfUsers}
             keyboardType="numeric"
@@ -127,7 +127,7 @@ const CreateScreen = props => {
           <TextInput
             style={styles.input}
             placeholder="Contact Number"
-            placeholderTextColor={'black'}
+            placeholderTextColor={'#ccc'}
             value={contactNo}
             onChangeText={setContactNo}
             keyboardType="numeric"
@@ -136,7 +136,7 @@ const CreateScreen = props => {
           <TextInput
             style={styles.input}
             placeholder="Product Price"
-            placeholderTextColor={'black'}
+            placeholderTextColor={'#ccc'}
             value={productPrice}
             onChangeText={setProductPrice}
             keyboardType="numeric"
@@ -178,9 +178,10 @@ const styles = StyleSheet.create({
     height: 60,
     marginHorizontal: 10,
     backgroundColor: 'white',
-    marginBottom: 10,
-    borderRadius: 15,
+    marginBottom: 5,
+    borderRadius: 50,
     paddingHorizontal: 10,
+    padding:11,
     color: 'black',
     fontSize: 16,
     fontWeight: '500',

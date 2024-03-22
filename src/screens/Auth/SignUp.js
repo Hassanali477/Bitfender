@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Image,
   Alert,
+  ImageBackground,
+  ScrollView,
 } from 'react-native';
 import axios from 'axios';
 import {SelectList} from 'react-native-dropdown-select-list';
@@ -36,6 +38,22 @@ const SignUp = (props, navigation) => {
   ];
 
   const handleSubmit = async () => {
+    if (name.trim() === '') {
+      Alert.alert('Error', 'Please enter your name.');
+      return;
+    }
+    if (!email.includes('@') || !email.includes('.')) {
+      Alert.alert('Error', 'Please enter a valid email address.');
+      return;
+    }
+    if (password.length < 8) {
+      Alert.alert('Error', 'Password must be at least 8 characters long.');
+      return;
+    }
+    if (mobileNo.length !== 11) {
+      Alert.alert('Error', 'Please enter a valid 11-digit mobile number.');
+      return;
+    }
     try {
       const userData = {name, email, password, mobileNo, department};
 
@@ -43,6 +61,7 @@ const SignUp = (props, navigation) => {
         'http://192.168.1.115:3000/register',
         userData,
       );
+      console.log(userData, 'checking');
       if (response.status === 200) {
         props.navigation.navigate('Login');
         Alert.alert('Success', 'User registered successfully.');
@@ -62,7 +81,7 @@ const SignUp = (props, navigation) => {
         );
       }
     } catch (error) {
-      console.error('Registration failed:', error.response);
+      console.error('Registration failed:', error.response.data.message);
       Alert.alert('Error', 'Failed to register user. Please try again later.');
     }
   };
@@ -85,123 +104,152 @@ const SignUp = (props, navigation) => {
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
-
   return (
     <View style={styles.container}>
       <View
         style={{
-          alignSelf: 'flex-start',
-          top: -50,
-          left: 15,
-          borderWidth: 1,
-          borderRadius: 10,
+          width: width,
+          height: height,
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        <Icon
-          type="material-community"
-          name="arrow-left"
-          size={42}
-          onPress={() => {
-            props.navigation.goBack();
-          }}
-        />
-      </View>
-      <Text style={styles.headText}>SIGN-UP</Text>
-      <View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name="person" type="material" color={'#fafad2'} size={26} />
-          <TextInput
-            placeholder="Name"
-            placeholderTextColor={'white'}
-            style={styles.textInput1}
-            value={name}
-            onChangeText={setName}
-          />
-        </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name="mail" size={26} color={'#fafad2'} />
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor={'white'}
-            style={styles.textInput1}
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
         <View
           style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-around',
-            marginRight: 10,
+            alignSelf: 'flex-start',
+            top: 90,
+            left: 20,
+            borderWidth: 1,
+            borderRadius: 10,
           }}>
           <Icon
-            type="material-commuity"
-            name="lock-open"
-            color={'#fafad2'}
-            size={28}
-            style={{marginRight: 10}}
+            type="material-community"
+            name="arrow-left"
+            size={42}
+            onPress={() => {
+              props.navigation.goBack();
+            }}
           />
+        </View>
+        <Image
+          source={require('../../Assets/images/launch_screen.jpg')}
+          style={{height: 200, width: 200, marginLeft: 0}}
+          resizeMode="contain"
+        />
+        <Text style={styles.headText}>SIGN-UP</Text>
+        <View style={{marginBottom: 30}}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon name="person" type="material" color={'black'} size={26} />
+            <TextInput
+              placeholder="Name"
+              placeholderTextColor={'black'}
+              style={styles.textInput1}
+              value={name}
+              onChangeText={text => {
+                setName(text);
+              }}
+            />
+          </View>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon name="mail" size={26} color={'black'} />
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor={'black'}
+              style={styles.textInput1}
+              value={email}
+              onChangeText={text => {
+                setEmail(text);
+              }}
+            />
+          </View>
           <View
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              borderWidth: 1,
-              flex: 1,
-              marginTop: 20,
-              borderRadius: 5,
-              marginBottom: 22,
-              // marginRight:10
+              justifyContent: 'space-around',
+              marginRight: 10,
             }}>
-            <TextInput
-              placeholder="Password"
-              style={{flex: 1, color: 'white', marginLeft: 5}}
-              placeholderTextColor={'white'}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!isPasswordVisible}
+            <Icon
+              type="material-commuity"
+              name="lock-open"
+              color={'black'}
+              size={28}
+              style={{marginRight: 8}}
             />
-            <TouchableOpacity onPress={togglePasswordVisibility}>
-              <Icon
-                name={isPasswordVisible ? 'visibility-off' : 'visibility'}
-                type="material"
-                color={'#fafad2'}
-                style={{marginRight: 10}}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                borderWidth: 1,
+                flex: 1,
+                marginTop: 10,
+                borderRadius: 5,
+                marginBottom: 10,
+              }}>
+              <TextInput
+                placeholder="Password"
+                style={{
+                  flex: 1,
+                  color: 'black',
+                  marginLeft: 5,
+                  fontWeight: '400',
+                  fontSize: 16,
+                }}
+                placeholderTextColor={'black'}
+                value={password}
+                onChangeText={text => {
+                  setPassword(text);
+                }}
+                secureTextEntry={!isPasswordVisible}
               />
-            </TouchableOpacity>
+              <TouchableOpacity onPress={togglePasswordVisibility}>
+                <Icon
+                  name={isPasswordVisible ? 'visibility-off' : 'visibility'}
+                  type="material"
+                  color={'black'}
+                  style={{marginRight: 10}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Icon name="phone" size={26} color={'black'} />
+            <TextInput
+              placeholder="Mobile No"
+              placeholderTextColor={'black'}
+              style={styles.textInput1}
+              value={mobileNo}
+              onChangeText={text => {
+                setMobileNo(text);
+              }}
+              keyboardType="numeric"
+              maxLength={11}
+            />
+          </View>
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+            }}>
+            <Icon
+              name="people"
+              type="material-icons"
+              size={26}
+              color={'black'}
+            />
+            <CustomDropdown
+              options={data}
+              onSelect={val => {
+                setDepartment(val);
+              }}
+              dropDownStyle={{color: 'black', height: 100}} // Adjust the height as needed
+            />
           </View>
         </View>
-
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon name="phone" size={26} color={'#fafad2'} />
-          <TextInput
-            placeholder="Mobile No"
-            placeholderTextColor={'white'}
-            style={styles.textInput1}
-            value={mobileNo}
-            onChangeText={setMobileNo}
-            keyboardType="numeric"
-            maxLength={11}
-          />
-        </View>
-        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Icon
-            name="people"
-            type="material-icons"
-            size={26}
-            color={'#fafad2'}
-          />
-          <CustomDropdown
-            options={data}
-            onSelect={val => {
-              console.log(val);
-              setDepartment(val);
-            }}
-          />
-        </View>
+        <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
+          <Text style={styles.button1}>Sign-up</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
-        <Text style={styles.button1}>Sign-up</Text>
-      </TouchableOpacity>
     </View>
   );
 };
@@ -211,7 +259,6 @@ export default SignUp;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EE5C25',
     alignItems: 'center',
     justifyContent: 'center',
     width: width,
@@ -224,7 +271,7 @@ const styles = StyleSheet.create({
     color: 'black',
     marginBottom: 25,
     alignSelf: 'center',
-    marginTop: -20,
+    // marginTop: -20,
     // marginLeft: 30,
   },
   textInput1: {
@@ -234,8 +281,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     margin: 10,
-    fontWeight: '300',
+    fontWeight: '400',
     fontSize: 16,
+    color: 'black',
   },
   buttonContainer: {
     backgroundColor: 'black',
@@ -244,7 +292,8 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     width: 90,
     marginRight: 35,
-    marginTop: 20,
+    // marginTop: 20,
+    marginBottom: 120,
   },
   button1: {
     fontSize: 18,
@@ -253,21 +302,23 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   dropDownPicker: {
-    width: 350,
+    width: 370,
+    height: 100,
     margin: 10,
     backgroundColor: 'transparent',
-    borderColor: 'white',
+    borderColor: '',
     borderRadius: 5,
   },
   dropDownContainer: {
+    height: 500,
     width: 350,
     marginTop: 1,
     alignItems: 'center',
-    borderColor: 'white',
+    borderColor: 'black',
     backgroundColor: '#EE5C25',
   },
   dropDownText: {
-    color: 'white',
+    color: 'black',
     fontWeight: '600',
   },
 });

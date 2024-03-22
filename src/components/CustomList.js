@@ -41,7 +41,7 @@ const CustomDropdown = ({options, onSelect}) => {
                 <TouchableOpacity
                   onPress={() => handleSelect(item.value)}
                   style={styles.option}>
-                  <Text style={{color: 'black'}}>{item.value}</Text>
+                  <Text style={{color: 'black', fontSize:15, padding:5}}>{item.value}</Text>
                 </TouchableOpacity>
               )}
             />
@@ -71,8 +71,8 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 16,
-    color: 'white',
-    fontWeight: '300',
+    color: 'black',
+    fontWeight: '400',
   },
   modalContainer: {
     flex: 1,
@@ -82,17 +82,14 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: 'white',
-    padding: 20,
+    padding: 25,
     borderRadius: 10,
-    // maxHeight: '80%',
     width: 250,
-    height: 120,
-    // alignItems:'center'
+    height: 130,
   },
   option: {
-    paddingVertical: 10,
+    paddingVertical: 5,
     borderBottomWidth: 2,
     borderBottomColor: 'lightgray',
-    // borderBot
   },
 });

@@ -67,29 +67,23 @@ const AdminScreen = props => {
 
   return (
     <View style={styles.container}>
-      <AdminHeaderScreen navigation={props.navigation}/>
+      <AdminHeaderScreen navigation={props.navigation} />
       <FlatList
         data={pendingRequests}
         renderItem={({item}) => (
           <View style={styles.card}>
-            <Text>Product Name: {item.ProductName}</Text>
-            <Text>Client Name: {item.ClientName}</Text>
-            <Text>Number of Users: {item.NumberOfUsers}</Text>
-            <Text>Contact No: {item.ContactNo}</Text>
-            <Text>Product Price: {item.ProductPrice}</Text>
-            <Text>Status: {item.status}</Text>
-            <Text>RejectedBy: {item.rejectedBy}</Text>
-            <Text>ApprovedBy: {item.approvedBy}</Text>
-            <Text>Date: {item.dateNow}</Text>
-            <Text>Time: {item.time}</Text>
-
-            {/* <View style={styles.buttonContainer}>
-              <Button
-                title="Approve"
-                onPress={() => approveRequest(item._id)}
-              />
-              <Button title="Reject" onPress={() => rejectRequest(item._id)} />
-            </View> */}
+            <Text style={styles.text}>Product Name: {item.ProductName}</Text>
+            <Text style={styles.text}>Client Name: {item.ClientName}</Text>
+            <Text style={styles.text}>
+              Number of Users: {item.NumberOfUsers}
+            </Text>
+            <Text style={styles.text}>Contact No: {item.ContactNo}</Text>
+            <Text style={styles.text}>Product Price: {item.ProductPrice}</Text>
+            <Text style={styles.text}>Status: {item.status}</Text>
+            <Text style={styles.text}>Rejected By: {item.rejectedBy}</Text>
+            <Text style={styles.text}>Approved By: {item.approvedBy}</Text>
+            <Text style={styles.text}>Date: {item.dateNow}</Text>
+            <Text style={styles.text}>Time: {item.time}</Text>
           </View>
         )}
         keyExtractor={item => item._id}
@@ -109,19 +103,19 @@ const AdminScreen = props => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 20,
+    backgroundColor: '#f5f5f5',
   },
-  heading: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 10,
+
+  flatListContainer: {
+    paddingVertical: 10,
+    paddingHorizontal: 5,
   },
   card: {
-    backgroundColor: 'black',
+    backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    marginVertical: 10,
-  marginHorizontal: 10,
+    margin:15,
+    marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -129,12 +123,12 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    elevation: 3,
   },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 10,
+  text: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 5,
   },
   activityIndicator: {
     position: 'absolute',

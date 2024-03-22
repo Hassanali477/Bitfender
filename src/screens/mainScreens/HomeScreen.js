@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, Dimensions} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  StatusBar,
+  ImageBackground,
+} from 'react-native';
 
 {
   /* {---------------Redux Imports------------} */
@@ -16,13 +23,18 @@ const height = Dimensions.get('screen').height;
 
 const HomeScreen = props => {
   // Extract additionalData from route.params if it exists
-  const additionalData = props.route.params?.additionalData;
+  // const additionalData = props.route.params?.additionalData;
 
   return (
-    <View style={styles.container}>
-      <Header />
-      <CustomCard navigation={props.navigation} />
-    </View>
+    <ImageBackground
+      source={require('../../Assets/images/cardbackground.jpg')}
+      style={{flex: 1, backgroundColor:'black'}}
+      resizeMode="cover">
+      <View style={styles.container}>
+        <Header />
+        <CustomCard navigation={props.navigation} />
+      </View>
+    </ImageBackground>
   );
 };
 {
@@ -42,7 +54,7 @@ const styles = StyleSheet.create({
     flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
-    backgroundColor: 'white',
+    // backgroundColor: '',
     // width: width,
     // height: height,
   },

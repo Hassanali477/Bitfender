@@ -6,6 +6,7 @@ import {
   Dimensions,
   NativeModules,
   StatusBar,
+  ImageBackground,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 
@@ -24,13 +25,16 @@ const SplashScreen = props => {
     }, 2000);
   });
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      style={styles.container}
+      source={require('../../Assets/images/background.jpg')}
+      resizeMode="cover">
       <Image
         source={require('../../Assets/images/launch_screen.jpg')}
         resizeMode="contain"
         style={{width: 250, height: 200}}
       />
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -43,6 +47,6 @@ const styles = StyleSheet.create({
     height: height,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#EE5C25',
+    // backgroundColor: '#EE5C25',
   },
 });
