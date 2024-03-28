@@ -13,7 +13,6 @@ import PendingRequestHeader from './PendingRequestHeader';
 import {connect} from 'react-redux';
 import * as userActions from '../redux/actions/user';
 import {bindActionCreators} from 'redux';
-import CustomButton from './CustomButton';
 
 const PendingRequestScreen = props => {
   const [pendingRequests, setPendingRequests] = useState([]);
@@ -48,20 +47,25 @@ const PendingRequestScreen = props => {
   }, []);
 
   const handleApprove = async item => {
+    // console.log(item, 'dsdsad');
     try {
       await axios.post(`http://192.168.1.115:3000/approveRequest/${item._id}`, {
-        email: email,
-        ProductName: item.ProductName,
-        ClientName: item.ClientName,
-        NumberOfUsers: item.NumberOfUsers,
+        CompanyName: item.CompanyName,
+        CompanyAddress: item.CompanyAddress,
+        ContactPerson: item.ContactPerson,
         ContactNo: item.ContactNo,
-        ProductPrice: item.ProductPrice,
+        Email: item.Email,
+        UserEmail: item.UserEmail,
+        ProductName: item.ProductName,
+        NumberOfLicense: item.numberOfLicense,
+        TotalLicense: item.TotalLicense,
+        TotalPrice: item.TotalPrice,
+        DateOfIssuance: item.DateOfIssuance,
+        DateOfExpiry: item.DateOfExpiry,
+        AccountManagerName: item.AccountManagerName,
       });
 
-      // Remove the approved request from the pendingRequests array
       setPendingRequests(pendingRequests.filter(req => req._id !== item._id));
-
-      // Navigate to the ApproveScreen and pass the approved request data
       navigation.navigate('Admin', {
         approvedRequestData: item,
       });
@@ -73,12 +77,19 @@ const PendingRequestScreen = props => {
   const handleReject = async item => {
     try {
       await axios.post(`http://192.168.1.115:3000/rejectRequest/${item._id}`, {
-        email: email,
-        ProductName: item.ProductName,
-        ClientName: item.ClientName,
-        NumberOfUsers: item.NumberOfUsers,
+        CompanyName: item.CompanyName,
+        CompanyAddress: item.CompanyAddress,
+        ContactPerson: item.ContactPerson,
         ContactNo: item.ContactNo,
-        ProductPrice: item.ProductPrice,
+        Email: item.Email,
+        UserEmail: item.UserEmail,
+        ProductName: item.ProductName,
+        NumberOfLicense: item.numberOfLicense,
+        TotalLicense: item.TotalLicense,
+        TotalPrice: item.TotalPrice,
+        DateOfIssuance: item.DateOfIssuance,
+        DateOfExpiry: item.DateOfExpiry,
+        AccountManagerName: item.AccountManagerName,
       });
 
       // Remove the rejected request from the pendingRequests array
@@ -99,35 +110,53 @@ const PendingRequestScreen = props => {
       <FlatList
         data={pendingRequests}
         contentContainerStyle={styles.listContainer}
-        renderItem={({item}) => (
-          <View style={styles.card}>
-            <Text style={styles.text}>Product Name: {item.ProductName}</Text>
-            <Text style={styles.text}>Client Name: {item.ClientName}</Text>
-            <Text style={styles.text}>
-              Number of Users: {item.NumberOfUsers}
-            </Text>
-            <Text style={styles.text}>Contact No: {item.ContactNo}</Text>
-            <Text style={styles.text}>Product Price: {item.ProductPrice}</Text>
-            <Text style={styles.text}>Date Created: {item.CreatedAt}</Text>
-            <Text style={styles.text}>Total Price: {item.TotalPrice}</Text>
-            {department == 'Admin' && (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-            onPress={() => handleApprove(item)}
-            style={[styles.button, styles.approveBtn]}
-          >
-            <Text style={styles.buttonText}>Approve</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => handleReject(item)}
-            style={[styles.button, styles.rejectBtn]}
-          >
-            <Text style={styles.buttonText}>Reject</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-          </View>
-        )}
+        renderItem={({item}) => {
+          // console.log(item, 'items checking');
+          return (
+            <View style={styles.card}>
+              <Text style={styles.text}>Company Name: {item.CompanyName}</Text>
+              <Text style={styles.text}>
+                Company Address: {item.CompanyAddress}
+              </Text>
+              <Text style={styles.text}>
+                Contact Person: {item.ContactPerson}
+              </Text>
+              <Text style={styles.text}>Contact No: {item.ContactNo}</Text>
+              <Text style={styles.text}>Email: {item.Email}</Text>
+              <Text style={styles.text}>Product Name: {item.ProductName}</Text>
+              <Text style={styles.text}>
+                Total License: {item.TotalLicense}
+              </Text>
+              <Text style={styles.text}>Total Price: {item.TotalPrice}</Text>
+              <Text style={styles.text}>
+                Date Of Issuance: {item.DateOfIssuance}
+              </Text>
+              <Text style={styles.text}>
+                Date Of Expiry: {item.DateOfExpiry}
+              </Text>
+              <Text style={styles.text}>
+                Account Manager Name: {item.AccountManagerName}
+              </Text>
+              <Text style={styles.text}>
+                Account Manager email: {item.UserEmail}
+              </Text>
+              {department == 'Admin' && (
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity
+                    onPress={() => handleApprove(item)}
+                    style={[styles.button, styles.approveBtn]}>
+                    <Text style={styles.buttonText}>Approve</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => handleReject(item)}
+                    style={[styles.button, styles.rejectBtn]}>
+                    <Text style={styles.buttonText}>Reject</Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
+          );
+        }}
         keyExtractor={item => item._id}
       />
       {isLoading && (

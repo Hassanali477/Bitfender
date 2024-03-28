@@ -34,7 +34,7 @@ const RejectScreen = props => {
     };
 
     fetchRejectedRequests();
-  },[]); // Ensure useEffect runs when route.params changes
+  }, []); // Ensure useEffect runs when route.params changes
 
   if (isLoading) {
     return (
@@ -49,20 +49,27 @@ const RejectScreen = props => {
       <RejectScreenHeader navigation={props.navigation} />
       <FlatList
         data={rejectedRequests}
-        contentContainerStyle={{paddingBottom: '20%'}}
         renderItem={({item}) => (
           <View style={styles.card}>
-          <Text style={styles.text}>Product Name: {item.ProductName}</Text>
-          <Text style={styles.text}>Client Name: {item.ClientName}</Text>
-          <Text style={styles.text}>Number of Users: {item.NumberOfUsers}</Text>
-          <Text style={styles.text}>Contact No: {item.ContactNo}</Text>
-          <Text style={styles.text}>Product Price: {item.ProductPrice}</Text>
-          <Text style={styles.text}>Status: {item.status}</Text>
-          <Text style={styles.text}>RejectedBy: {item.rejectedBy}</Text>
-          <Text style={styles.text}>ApprovedBy: {item.approvedBy}</Text>
-          <Text style={styles.text}>Date: {item.dateNow}</Text>
-          <Text style={styles.text}>Time: {item.time}</Text>
-        </View>
+            <Text style={styles.text}>Company Name: {item.CompanyName}</Text>
+            <Text style={styles.text}>
+              Company Address: {item.CompanyAddress}
+            </Text>
+            <Text style={styles.text}>
+              Contact Person: {item.ContactPerson}
+            </Text>
+            <Text style={styles.text}>Contact No: {item.ContactNo}</Text>
+            <Text style={styles.text}>Product Name: {item.ProductName}</Text>
+            <Text style={styles.text}>Client Email: {item.Email}</Text>
+            <Text style={styles.text}>Total License: {item.TotalLicense}</Text>
+            <Text style={styles.text}>Total Price: {item.TotalPrice}</Text>
+            <Text style={styles.text}>Account Manager email: {item.UserEmail}</Text>
+            <Text style={styles.text}>Status: {item.status}</Text>
+            <Text style={styles.text}>RejectedBy: {item.rejectedBy}</Text>
+            <Text style={styles.text}>ApprovedBy: {item.approvedBy}</Text>
+            <Text style={styles.text}>Date: {item.dateNow}</Text>
+            <Text style={styles.text}>Time: {item.time}</Text>
+          </View>
         )}
         keyExtractor={item => item._id}
       />

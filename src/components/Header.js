@@ -5,14 +5,14 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as userActions from '../redux/actions/user';
 import {useNavigation} from '@react-navigation/native'; // Import useNavigation hook
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Header = props => {
   const navigation = useNavigation(); // Initialize useNavigation hook
 
   const handleLogout = () => {
-    // Dispatch action to reset user data in Redux state to null
+    AsyncStorage.clear();
     props.actions.user(null);
-    // Navigate to login screen
     navigation.navigate('Login');
   };
 

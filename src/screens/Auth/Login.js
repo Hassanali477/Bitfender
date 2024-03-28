@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import axios from 'axios';
 import {Icon} from 'react-native-elements';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 {
   /* {---------------Redux Imports------------} */
 }
@@ -51,12 +51,17 @@ const Login = props => {
       if (response.status === 200) {
         console.log('Login successful', response.data);
         const token = response.data.token;
-        console.log(token, 'checking');
         const user = response.data.userData;
         if (user && user.name) {
           var {actions} = props;
+          AsyncStorage.setItem(
+            '@usercredentials',
+            JSON.stringify({
+              email: email,
+              password: password,
+            }),
+          );
           actions.userToken(token);
-          console.log(token, 'token');
           actions.user(user);
           props.navigation.navigate('Home');
         } else {
@@ -83,16 +88,16 @@ const Login = props => {
   };
 
   return (
-    <ScrollView >
-    {/* <ImageBackground
+    <ScrollView>
+      {/* <ImageBackground
       source={require('../../Assets/images/background.jpg')}
       style={{height:'100%'}} > */}
       <View style={styles.container}>
-          <Image
-            source={require('../../Assets/images/launch_screen.jpg')}
-            style={{height: 150, width: 200, marginBottom: 10, marginTop:90}}
-            resizeMode="contain"
-          />
+        <Image
+          source={require('../../Assets/images/b2.png')}
+          style={{height: 150, width: 200, marginBottom: 10, marginTop: 90}}
+          resizeMode="contain"
+        />
         <Text style={styles.headText}>LOGIN</Text>
         <View style={styles.textInputContainer}>
           <View
@@ -170,7 +175,7 @@ const Login = props => {
                 borderWidth: 1,
                 borderColor: 'white',
                 width: 160,
-                marginLeft:28
+                marginLeft: 28,
               },
             ]}
             onPress={() => props.navigation.navigate('ForgetPassword')}>
@@ -184,7 +189,7 @@ const Login = props => {
               {marginLeft: 0, backgroundColor: 'black'},
             ]}
             onPress={handleLogin}>
-            <Text style={[styles.button1, {color: 'white'}]}>Login</Text>
+            <Text style={[styles.button1, {color: 'white', }]}>Login</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.text1}>
@@ -201,7 +206,7 @@ const Login = props => {
           />
         )}
       </View>
-    {/* </ImageBackground> */}
+      {/* </ImageBackground> */}
     </ScrollView>
   );
 };
@@ -223,19 +228,21 @@ export default connect(mapStateToProps, mapDispatchToProps)(Login);
 
 const styles = StyleSheet.create({
   container: {
-    flex:1,
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     width: width,
-    // height: height,
+    color:'white',
   },
   headText: {
-    fontWeight: '700',
+    fontWeight: '900',
     fontSize: 30,
     letterSpacing: 1,
     color: 'black',
     marginBottom: 25,
-    marginTop: 45,
+    marginTop: 25,
+    marginRight:10,
+    alignSelf:'center'
   },
   textInput1: {
     borderColor: 'black',

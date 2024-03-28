@@ -34,6 +34,7 @@ const AdminScreen = props => {
         );
         setPendingRequests(response.data);
         setIsLoading(false);
+        console.log(response.data, 'checking message');
       } catch (error) {
         setIsLoading(false);
         console.error('Error:', error);
@@ -72,18 +73,34 @@ const AdminScreen = props => {
         data={pendingRequests}
         renderItem={({item}) => (
           <View style={styles.card}>
-            <Text style={styles.text}>Product Name: {item.ProductName}</Text>
-            <Text style={styles.text}>Client Name: {item.ClientName}</Text>
+            <Text style={styles.text}>Company Name: {item.CompanyName}</Text>
             <Text style={styles.text}>
-              Number of Users: {item.NumberOfUsers}
+              Company Address: {item.CompanyAddress}
+            </Text>
+            <Text style={styles.text}>
+              Contact Person: {item.ContactPerson}
             </Text>
             <Text style={styles.text}>Contact No: {item.ContactNo}</Text>
-            <Text style={styles.text}>Product Price: {item.ProductPrice}</Text>
+            <Text style={styles.text}>Product Name: {item.ProductName}</Text>
+            <Text style={styles.text}>Client Email: {item.Email}</Text>
+            <Text style={styles.text}>Total License: {item.TotalLicense}</Text>
+            <Text style={styles.text}>Total Price: {item.TotalPrice}</Text>
+            <Text style={styles.text}>
+              Account Manager name: {item.AccountManagerName}
+            </Text>
+            <Text style={styles.text}>
+              Account Manager email: {item.UserEmail}
+            </Text>
             <Text style={styles.text}>Status: {item.status}</Text>
             <Text style={styles.text}>Rejected By: {item.rejectedBy}</Text>
             <Text style={styles.text}>Approved By: {item.approvedBy}</Text>
             <Text style={styles.text}>Date: {item.dateNow}</Text>
             <Text style={styles.text}>Time: {item.time}</Text>
+            <View style={styles.expirtyDateContainer}>
+              {item.Message !== '' && (
+                <Text style={styles.expirtyDate}>{item.Message}</Text>
+              )}
+            </View>
           </View>
         )}
         keyExtractor={item => item._id}
@@ -114,7 +131,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 10,
     padding: 20,
-    margin:15,
+    margin: 15,
     marginBottom: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -134,6 +151,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
     alignSelf: 'center',
     marginTop: '50%',
+  },
+  expirtyDateContainer:{
+    width:'100%',
+    height: 40,
+    backgroundColor: 'black',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop:15,
+    borderRadius:10
+  },
+  expirtyDate: {
+    fontSize: 16,
+    color: 'white',
+    marginTop: 5,
+    marginBottom: 5,
+    fontWeight: 'bold',
+    backgroundColor: 'black',
   },
 });
 {

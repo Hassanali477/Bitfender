@@ -23,7 +23,12 @@ const HeaderCreate = ({navigation}) => {
             type="material-community"
             name="arrow-left"
             color={'white'}
-            iconStyle={{borderWidth: 1, borderColor: 'white', borderRadius: 10,padding:5}}
+            iconStyle={{
+              borderWidth: 1,
+              borderColor: 'white',
+              borderRadius: 10,
+              padding: 5,
+            }}
             size={32}
             onPress={() => {
               navigation.navigate('Home');
@@ -40,8 +45,8 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#EE5C25',
     // alignItems:'center'
-    justifyContent:'center'
-},
+    justifyContent: 'center',
+  },
   header: {
     height: 80,
     backgroundColor: 'black',
