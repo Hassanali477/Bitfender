@@ -66,24 +66,16 @@ const SplashScreen = props => {
     checkCredentials();
   }, []);
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      style={styles.container}
+      source={require('../../Assets/images/background.jpg')}
+      resizeMode="cover">
       <Image
-        source={require('../../Assets/images/b2.png')}
+        source={require('../../Assets/images/launch_screen.jpg')}
         resizeMode="contain"
         style={{width: 250, height: 200}}
       />
-      <Text
-        style={{
-          fontSize: 26,
-          alignSelf: 'center',
-          fontWeight: 'bold',
-          marginTop: 20,
-          color: '#fff',
-          letterSpacing: 2.5,
-        }}>
-        BITDEFENDER
-      </Text>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -108,6 +100,6 @@ const styles = StyleSheet.create({
     height: height,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black',
+    // backgroundColor: '#EE5C25',
   },
 });

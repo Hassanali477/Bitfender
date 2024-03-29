@@ -31,7 +31,7 @@ const RejectScreenHeader = props => {
         </TouchableOpacity>
         <Text
           style={{
-            marginLeft: 40,
+            marginLeft: 45,
             fontSize: 22,
             letterSpacing: 4,
             fontWeight: 'bold',

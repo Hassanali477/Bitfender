@@ -67,6 +67,7 @@ const Login = props => {
         } else {
           console.error('Login failed: User data incomplete');
           Alert.alert('Error', 'Invalid user data received');
+          setIsLoading(false);
         }
       } else {
         console.error(
@@ -74,10 +75,12 @@ const Login = props => {
           response.status,
         );
         Alert.alert('Error', 'Unexpected response from server');
+        setIsLoading(false);
       }
     } catch (error) {
       console.error('Login failed', error);
       Alert.alert('Incorrect password', 'Incorrect email and password.');
+      setIsLoading(false);
     }
   };
 
@@ -94,7 +97,7 @@ const Login = props => {
       style={{height:'100%'}} > */}
       <View style={styles.container}>
         <Image
-          source={require('../../Assets/images/b2.png')}
+          source={require('../../Assets/images/launch_screen.jpg')}
           style={{height: 150, width: 200, marginBottom: 10, marginTop: 90}}
           resizeMode="contain"
         />
@@ -189,7 +192,7 @@ const Login = props => {
               {marginLeft: 0, backgroundColor: 'black'},
             ]}
             onPress={handleLogin}>
-            <Text style={[styles.button1, {color: 'white', }]}>Login</Text>
+            <Text style={[styles.button1, {color: 'white'}]}>Login</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.text1}>
@@ -232,17 +235,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: width,
-    color:'white',
+    // height: height,
   },
   headText: {
-    fontWeight: '900',
+    fontWeight: 'bold',
     fontSize: 30,
-    letterSpacing: 1,
+    letterSpacing: 2.5,
     color: 'black',
     marginBottom: 25,
     marginTop: 25,
-    marginRight:10,
-    alignSelf:'center'
   },
   textInput1: {
     borderColor: 'black',

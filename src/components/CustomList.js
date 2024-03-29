@@ -41,7 +41,9 @@ const CustomDropdown = ({options, onSelect}) => {
                 <TouchableOpacity
                   onPress={() => handleSelect(item.value)}
                   style={styles.option}>
-                  <Text style={{color: 'black', fontSize:15, padding:5}}>{item.value}</Text>
+                  <Text style={{color: 'black', fontSize: 15, padding: 5}}>
+                    {item.value}
+                  </Text>
                 </TouchableOpacity>
               )}
             />
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     padding: 25,
     borderRadius: 10,
     width: 250,
-    height: 130,
+    height: 135,
   },
   option: {
     paddingVertical: 5,

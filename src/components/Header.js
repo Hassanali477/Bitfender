@@ -12,7 +12,7 @@ const Header = props => {
 
   const handleLogout = () => {
     AsyncStorage.clear();
-    props.actions.user(null);
+    props.actions.user(null)
     navigation.navigate('Login');
   };
 

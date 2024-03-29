@@ -1,19 +1,14 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, TouchableOpacity, View, Modal} from 'react-native';
+import React, {useState} from 'react';
 import {Icon} from 'react-native-elements';
+import {Image} from 'react-native';
 
-const AdminHeaderScreen = props => {
+const AdminHeaderScreen = ({navigation, toggleModalVisibility}) => {
+
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          flexDirection: 'row',
-          // flex:1,
-          alignItems: 'center',
-          backgroundColor: 'black',
-          // justifyContent:'center'
-        }}>
-        <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
+      <View style={styles.row}>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
           <Icon
             name="arrow-left"
             type="material-community"
@@ -29,17 +24,13 @@ const AdminHeaderScreen = props => {
             activeOpacity={0.3}
           />
         </TouchableOpacity>
-        <Text
-          style={{
-            marginLeft: 40,
-            fontSize: 22,
-            letterSpacing: 4,
-            fontWeight: 'bold',
-            color: 'white',
-            marginRight: 30,
-          }}>
-          Approve Request
-        </Text>
+        <Text style={styles.title}>Approve Request</Text>
+        <TouchableOpacity onPress={toggleModalVisibility}>
+          <Image
+            source={require('../Assets/images/down-chevron.png')}
+            style={styles.icon}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -49,12 +40,64 @@ export default AdminHeaderScreen;
 
 const styles = StyleSheet.create({
   container: {
-    // flex:1,
     flexDirection: 'row',
     alignItems: 'center',
     height: 70,
-    // justifyContent: 'center',
     backgroundColor: 'black',
     width: '100%',
+  },
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  icon: {
+    width: 30,
+    height: 30,
+    marginLeft: 10,
+  },
+  icon1: {
+    width: 40,
+    height: 35,
+    marginLeft: 10,
+  },
+  title: {
+    marginLeft: 35,
+    fontSize: 20,
+    letterSpacing: 4,
+    fontWeight: 'bold',
+    color: 'white',
+    marginRight: 30,
+  },
+  modalContainer: {
+    position: 'absolute',
+    top: 70,
+    right: 0,
+    zIndex: 999,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    padding: 5,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 3,
+    // borderWidth: 1,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 15,
+  },
+  modalButton: {
+    padding: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: 'grey',
+  },
+  modalButtonText: {
+    fontSize: 17,
+    color: 'black',
   },
 });

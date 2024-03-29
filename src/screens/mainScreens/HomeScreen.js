@@ -22,8 +22,6 @@ const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
 
 const HomeScreen = props => {
-  // Extract additionalData from route.params if it exists
-  // const additionalData = props.route.params?.additionalData;
 
   return (
     <ImageBackground

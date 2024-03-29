@@ -31,7 +31,7 @@ const PendingRequestHeader = props => {
         </TouchableOpacity>
         <Text
           style={{
-            marginLeft: 30,
+            marginLeft: 45,
             fontSize: 22,
             letterSpacing: 4,
             fontWeight: 'bold',
