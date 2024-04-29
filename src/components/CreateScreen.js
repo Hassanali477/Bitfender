@@ -12,6 +12,7 @@ import {
   Dimensions,
   TouchableWithoutFeedback,
   Image,
+  BackHandler,
 } from 'react-native';
 import axios from 'axios';
 import HeaderCreate from './HeaderCreate';
@@ -19,11 +20,30 @@ import {connect} from 'react-redux';
 import * as userActions from '../redux/actions/user';
 import {bindActionCreators} from 'redux';
 import {Calendar} from 'react-native-calendars';
+import LinearGradient from 'react-native-linear-gradient';
+import API_BASE_URL from '../../config';
+import {useNavigation} from '@react-navigation/native';
+import CustomAlert from './CustomAlert';
 
 const screenWidth = Dimensions.get('screen').width;
 const iconSize = 30;
 
 const CreateScreen = props => {
+  const navigation = useNavigation();
+  const [errorMessage, setErrorMessage] = useState(''); // State to manage error message
+  const [showAlert, setShowAlert] = useState(false);
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack(); // Navigate back when the back button is pressed
+      return true; // Prevent default behavior
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
   var {
     userData: {
       user: {name, department},
@@ -55,6 +75,8 @@ const CreateScreen = props => {
   const [numberOfLicenseError, setNumberOfLicenseError] = useState('');
   const [amountOfLicenseError, setAmountOfLicenseError] = useState('');
   const [totalPriceError, setTotalPriceError] = useState('');
+  const [dateOfIssuanceError, setDateOfIssuanceError] = useState('');
+  const [dateOfExpiryError, setDateOfExpiryError] = useState('');
   const [accountManagerError, setAccountManagerError] = useState('');
   const validateInputs = () => {
     // Reset error messages
@@ -100,7 +122,7 @@ const CreateScreen = props => {
     }
     if (!dateOfIssuance.trim()) {
       setDateOfIssuanceError('');
-      inValid = false;
+      isValid = false;
     }
     if (!numberOfLicense.trim()) {
       setNumberOfLicenseError('Number of license is required');
@@ -134,9 +156,48 @@ const CreateScreen = props => {
   }, [numberOfLicense, amountOfLicense]);
 
   const createHandleSubmit = async () => {
-    const isValid = validateInputs();
-    if (!isValid) {
-      return;
+    // const isValid = validateInputs();
+    // if (!isValid) {
+    //   return;
+    // }
+    if (
+      !productName ||
+      !companyAddress ||
+      !contactPerson ||
+      !contactNo ||
+      !clientEmail ||
+      !numberOfLicense ||
+      !amountOfLicense ||
+      !totalPrice ||
+      !dateOfIssuance ||
+      !dateOfExpiry ||
+      !accountManager
+    ) {
+      // Update error messages for empty inputs
+      setProductNameError(!productName ? 'Product name is required' : '');
+      setCompanyNameError(!companyName ? 'Company name is required' : '');
+      setCompanyAddressError(
+        !companyAddress ? 'Company Address is required' : '',
+      );
+      setContactPersonError(!contactPerson ? 'Contact person is required' : '');
+      setContactNoError(!contactNo ? 'Contact no is required' : '');
+      setClientEmailError(!clientEmail ? 'Client email is required' : '');
+      setNumberOfLicenseError(
+        !numberOfLicense ? 'Number of license is required' : '',
+      );
+      setAmountOfLicenseError(
+        !amountOfLicense ? 'Amount of license is required' : '',
+      );
+      setTotalPriceError(!totalPrice ? 'Total price is required' : '');
+      setDateOfIssuanceError(
+        !dateOfIssuance ? 'Date of issuance is required' : '',
+      );
+      setDateOfExpiryError(!dateOfExpiry ? 'Date of expiry is required' : '');
+      setAccountManagerError(
+        !accountManager ? 'Account manager name is required' : '',
+      );
+
+      return; // Stop here, don't proceed further
     }
     const userDataCreate = {
       CompanyName: companyName,
@@ -174,10 +235,11 @@ const CreateScreen = props => {
           isNaN(amountOfLicense) ||
           isNaN(totalPrice)
         ) {
-          Alert.alert(
-            'Error',
-            'Contact number, number of license, amount of license, and total price must be numeric',
-          );
+          // Alert.alert(
+          //   'Error',
+          //   'Contact number, number of license, amount of license, and total price must be numeric',
+          // );
+
           return;
         }
 
@@ -187,7 +249,7 @@ const CreateScreen = props => {
 
       setIsLoading(true);
       const responseUser = await axios.post(
-        `http://192.168.1.115:3000/CreateUserData`,
+        `${API_BASE_URL}/nodeapp/CreateUserData`,
         userDataCreate,
         {
           headers: {
@@ -197,11 +259,16 @@ const CreateScreen = props => {
         },
       );
       setIsLoading(false);
-      Alert.alert('Success', 'Data sent successfully');
+      // Alert.alert('Success', 'Data sent successfully');
+      setShowAlert(true);
+      setErrorMessage('Success: Data sent successfully');
       console.log(responseUser.data, 'Data successfully sent');
+      props.navigation.navigate('PendingRequest');
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Failed to send data');
+      // Alert.alert('Error', 'Failed to send data');
+      setShowAlert(true);
+      setErrorMessage('Error: Failed to send data');
     }
   };
   const openCalendar = calendarNumber => {
@@ -213,7 +280,6 @@ const CreateScreen = props => {
   };
 
   const changeDOB = (day, calendarNumber) => {
-    console.log(day, 'dasd');
     if (calendarNumber === 1) {
       setDateOfIssuance(day.dateString);
       setShowCalendar1(false);
@@ -228,16 +294,23 @@ const CreateScreen = props => {
       <HeaderCreate navigation={props.navigation} />
       <ScrollView contentContainerStyle={{paddingBottom: 20}}>
         <View style={styles.container}>
+          <CustomAlert
+            visible={showAlert}
+            message={errorMessage}
+            onClose={() => setShowAlert(false)}
+            type={errorMessage.startsWith('Success') ? 'success' : 'error'}
+          />
           <View style={{marginBottom: 10}}>
             <Text
               style={{
                 color: 'black',
                 fontSize: 26,
-                fontWeight: '800',
-                letterSpacing: 2.5,
+                fontStyle: 'italic',
+                fontWeight: '500',
+                letterSpacing: 1,
                 marginTop: 25,
               }}>
-              WELCOME TO ORDER !
+              Welcome To Order
             </Text>
           </View>
           <TextInput
@@ -274,18 +347,6 @@ const CreateScreen = props => {
           />
 
           <TextInput
-            style={[styles.input, contactNoError && styles.errorInput]}
-            placeholder="Contact Number"
-            placeholderTextColor={'#ccc'}
-            value={contactNo}
-            keyboardType="numeric"
-            onChangeText={text => {
-              setContactNo(text);
-              setContactNoError('');
-            }}
-          />
-
-          <TextInput
             style={[styles.input, clientEmailError && styles.errorInput]}
             placeholder="Client Email"
             placeholderTextColor={'#ccc'}
@@ -295,7 +356,6 @@ const CreateScreen = props => {
               setClientEmailError('');
             }}
           />
-
           <TextInput
             style={[styles.input, productNameError && styles.errorInput]}
             placeholder="Product Name"
@@ -306,11 +366,27 @@ const CreateScreen = props => {
               setProductNameError('');
             }}
           />
-          <View style={styles.inputContainer}>
+          <View style={{flexDirection: 'row'}}>
             <TextInput
               style={[
-                styles.inputField,
+                styles.input,
+                contactNoError && styles.errorInput,
+                {width: 180},
+              ]}
+              placeholder="Contact Number"
+              placeholderTextColor={'#ccc'}
+              value={contactNo}
+              keyboardType="numeric"
+              onChangeText={text => {
+                setContactNo(text);
+                setContactNoError('');
+              }}
+            />
+            <TextInput
+              style={[
+                styles.input,
                 numberOfLicenseError && styles.errorInput,
+                {width: 180},
               ]}
               placeholder="Number License Price"
               placeholderTextColor={'#ccc'}
@@ -322,12 +398,12 @@ const CreateScreen = props => {
               }}
             />
           </View>
-
-          <View style={styles.inputContainer}>
+          <View style={{flexDirection: 'row'}}>
             <TextInput
               style={[
-                styles.inputField,
+                styles.input,
                 amountOfLicenseError && styles.errorInput,
+                {width: 180},
               ]}
               placeholder="Amount Of License"
               placeholderTextColor={'#ccc'}
@@ -338,97 +414,140 @@ const CreateScreen = props => {
                 setAmountOfLicenseError('');
               }}
             />
-          </View>
-          {amountOfLicenseError ? (
-            <Text style={styles.errorText}>{amountOfLicenseError}</Text>
-          ) : null}
-
-          <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.inputField, totalPriceError && styles.errorInput]}
+              style={[
+                styles.input,
+                totalPriceError && styles.errorInput,
+                {width: 180},
+              ]}
               placeholder="Total License Price"
               placeholderTextColor={'#ccc'}
               value={totalPrice}
+              editable={false}
               onChangeText={text => {
                 setTotalPrice(text);
                 setTotalPriceError('');
               }}
             />
           </View>
-          {totalPriceError ? (
+          {/* </View> */}
+          {/* {amountOfLicenseError ? (
+            <Text style={styles.errorText}>{amountOfLicenseError}</Text>
+          ) : null} */}
+
+          {/* <View style={styles.inputContainer}> */}
+
+          {/* </View> */}
+          {/* {totalPriceError ? (
             <Text style={styles.errorText}>{totalPriceError}</Text>
-          ) : null}
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Date Of Issuance"
-              style={styles.inputField}
-              placeholderTextColor="#ccc"
-              editable={false}
-              value={dateOfIssuance}
-              onChangeText={() => {
-                setDateOfIssuanceError('dasdja');
-              }}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                openCalendar(1);
-              }}
-              style={styles.calendarButton}>
-              <Image
-                source={require('../Assets/images/calendar.png')}
-                style={styles.calendarIcon}
+          ) : null} */}
+          <View style={{flexDirection: 'row'}}>
+            <View
+              style={[
+                styles.inputContainer,
+                dateOfIssuanceError && styles.errorInput,
+              ]}>
+              <TextInput
+                placeholder="Date Of Issuance"
+                style={[styles.inputField, {width: 150, padding: 10}]}
+                placeholderTextColor="#ccc"
+                editable={false}
+                value={dateOfIssuance}
+                onChangeText={() => {
+                  setDateOfIssuance('');
+                  setDateOfIssuanceError('');
+                }}
               />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  openCalendar(1);
+                }}
+                style={styles.calendarButton}>
+                <Image
+                  source={require('../Assets/images/calendar.png')}
+                  style={styles.calendarIcon}
+                />
+              </TouchableOpacity>
+            </View>
+            <View
+              style={[
+                styles.inputContainer,
+                dateOfExpiryError && styles.errorInput,
+                {marginLeft: 20},
+              ]}>
+              <TextInput
+                placeholder="Date Of Expiry"
+                style={[styles.inputField, {width: 150, padding: 10}]}
+                placeholderTextColor="#ccc"
+                editable={false}
+                value={dateOfExpiry}
+                onChangeText={() => {
+                  setDateOfExpiry('');
+                  setDateOfExpiryError('');
+                }}
+              />
+              <TouchableOpacity
+                onPress={() => {
+                  openCalendar(2);
+                }}
+                style={styles.calendarButton}>
+                <Image
+                  source={require('../Assets/images/calendar.png')}
+                  style={styles.calendarIcon}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Date Of Expiry"
-              style={styles.inputField}
-              placeholderTextColor="#ccc"
-              editable={false}
-              value={dateOfExpiry}
-            />
-            <TouchableOpacity
-              onPress={() => {
-                openCalendar(2);
-              }}
-              style={styles.calendarButton}>
-              <Image
-                source={require('../Assets/images/calendar.png')}
-                style={styles.calendarIcon}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={[
-                styles.inputField,
-                accountManagerError && styles.errorInput,
-              ]}
-              placeholder="Account Manager Name"
-              placeholderTextColor={'#ccc'}
-              value={accountManager}
-              onChangeText={text => {
-                setAccountManager(text);
-                setAccountManagerError('');
-              }}
-            />
-          </View>
-          {accountManagerError ? (
+          {/* <View style={styles.inputContainer}> */}
+          <TextInput
+            style={[styles.input, accountManagerError && styles.errorInput]}
+            placeholder="Account Manager Name"
+            placeholderTextColor={'#ccc'}
+            value={accountManager}
+            onChangeText={text => {
+              setAccountManager(text);
+              setAccountManagerError('');
+            }}
+          />
+          {/* </View> */}
+          {/* {accountManagerError ? (
             <Text style={styles.errorText}>{accountManagerError}</Text>
-          ) : null}
+          ) : null} */}
 
           <View style={styles.btnContainer}>
             <TouchableOpacity
-              style={styles.submitButton}
-              onPress={() => createHandleSubmit()}>
-              <Text style={styles.text1}>Submit</Text>
+              // style={styles.submitButton}
+              onPress={() => props.navigation.navigate('PendingRequest')}>
+              <LinearGradient
+                colors={['#EE5C25', '#000']}
+                // Adjust the second color to a lighter shade of black
+                locations={[0.1, 0.9]} // Adjust the gradient position as needed
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
+                style={[styles.button, {borderRadius: 50}]}>
+                <Text style={[styles.buttonText, {color: 'white'}]}>
+                  PENDING REQUEST
+                </Text>
+              </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity
-              style={styles.submitButton}
-              onPress={() => props.navigation.navigate('PendingRequest')}>
-              <Text style={styles.text1}>Pending Request</Text>
+              // style={styles.submitButton}
+              onPress={() => createHandleSubmit()}>
+              <LinearGradient
+                colors={['#000', '#000']} // Adjust the second color to a lighter shade of black
+                locations={[0.1, 0.9]} // Adjust the gradient position as needed
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
+                style={[styles.button, {borderRadius: 50, marginLeft: 20}]}>
+                <Text
+                  style={[
+                    styles.buttonText,
+                    {color: 'white', width: 130, textAlign: 'center'},
+                  ]}>
+                  SUBMIT
+                </Text>
+              </LinearGradient>
             </TouchableOpacity>
           </View>
           {isLoading && (
@@ -477,6 +596,7 @@ const CreateScreen = props => {
       {showCalendar2 && (
         <View style={styles.calendarContainer}>
           <Calendar
+            minDate={dateOfExpiry}
             style={styles.calendar}
             markedDates={{
               [dateOfExpiry]: {selected: true, selectedColor: '#1F93D1'},
@@ -514,9 +634,9 @@ const CreateScreen = props => {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#d3d3d3',
     paddingHorizontal: 15,
   },
   input: {
@@ -525,24 +645,24 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     backgroundColor: 'white',
     marginBottom: 5,
-    borderRadius: 50,
+    borderRadius: 10,
     paddingHorizontal: 10,
     padding: 11,
     color: 'black',
-    fontSize: 16,
-    fontWeight: '500',
+    fontSize: 13,
     marginTop: 15,
+    borderColor: '#ccc',
+    borderWidth: 1,
   },
   btnContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignSelf: 'center',
-    width: '100%',
   },
   submitButton: {
     marginTop: 20,
     backgroundColor: 'black',
-    borderRadius: 15,
-    height: 70,
-    justifyContent: 'center',
+    borderRadius: 50,
   },
   text1: {
     alignSelf: 'center',
@@ -594,12 +714,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    width: '100%',
+    // width: '100%',
     height: 60,
     backgroundColor: 'white',
     marginBottom: 5,
     borderRadius: 10,
-    paddingHorizontal: 10,
+    // paddingHorizontal: 10,
     fontSize: 13,
     marginTop: 15,
   },
@@ -629,6 +749,27 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 5,
     alignSelf: 'flex-start',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 10,
+  },
+  button: {
+    marginTop: 20,
+    // marginLeft: 25,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  buttonText: {
+    paddingTop: 5,
+    paddingBottom: 5,
+    fontSize: 16,
+    color: 'white',
+    fontWeight: '900',
+    letterSpacing: 1,
   },
 });
 

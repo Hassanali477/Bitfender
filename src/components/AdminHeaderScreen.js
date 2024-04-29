@@ -1,10 +1,9 @@
-import {StyleSheet, Text, TouchableOpacity, View, Modal} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import {Icon} from 'react-native-elements';
 import {Image} from 'react-native';
 
 const AdminHeaderScreen = ({navigation, toggleModalVisibility}) => {
-
   return (
     <View style={styles.container}>
       <View style={styles.row}>
@@ -27,7 +26,7 @@ const AdminHeaderScreen = ({navigation, toggleModalVisibility}) => {
         <Text style={styles.title}>Approve Request</Text>
         <TouchableOpacity onPress={toggleModalVisibility}>
           <Image
-            source={require('../Assets/images/down-chevron.png')}
+            source={require('../Assets/images/arrow-down.png')}
             style={styles.icon}
           />
         </TouchableOpacity>
@@ -51,12 +50,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 28,
+    height: 18,
     marginLeft: 10,
   },
   icon1: {
-    width: 40,
+    width: 50,
     height: 35,
     marginLeft: 10,
   },

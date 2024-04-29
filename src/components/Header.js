@@ -1,36 +1,44 @@
+// Header.js
+
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import {Icon} from 'react-native-elements';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as userActions from '../redux/actions/user';
-import {useNavigation} from '@react-navigation/native'; // Import useNavigation hook
+import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Header = props => {
-  const navigation = useNavigation(); // Initialize useNavigation hook
+const {width} = Dimensions.get('window');
 
-  const handleLogout = () => {
-    AsyncStorage.clear();
-    props.actions.user(null)
-    navigation.navigate('Login');
+const Header = props => {
+  const navigation = useNavigation();
+
+  const openDrawer = () => {
+    props.toggleDrawer(); // Toggle the drawer state
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.headerText}>HOME BIT PORTAL</Text>
-        <TouchableOpacity onPress={handleLogout}>
-          <View style={styles.iconContainer}>
-            <Icon
-              type="material-community"
-              name="logout"
-              color={'white'}
-              size={30}
-              style={{marginLeft: 25}}
-            />
-          </View>
+        {/* Hamburger Menu */}
+        <TouchableOpacity onPress={openDrawer} style={styles.iconContainer}>
+          <Icon
+            type="material-community"
+            name="menu"
+            color={'white'}
+            size={width * 0.08} // Adjust icon size based on screen width
+          />
         </TouchableOpacity>
+        {/* Header Text */}
+        <Text style={styles.headerText}>HOME BIT PORTAL</Text>
+        {/* Logout Icon */}
       </View>
     </View>
   );
@@ -53,20 +61,17 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    // justifyContent: 'space-between',
-    height: 75,
     backgroundColor: 'black',
-    paddingHorizontal: 10,
+    height: width * 0.2, // Adjust height based on screen width
   },
   headerText: {
-    fontSize: 22,
+    fontSize: width * 0.055, // Adjust font size based on screen width
     fontWeight: 'bold',
-    letterSpacing: 5,
+    letterSpacing: width * 0.01, // Adjust letter spacing based on screen width
     color: 'white',
-    textAlign: 'center',
-    marginLeft: 60,
+    marginLeft: 40,
   },
   iconContainer: {
-    padding: 10,
+    padding: width * 0.02, // Adjust padding based on screen width
   },
 });

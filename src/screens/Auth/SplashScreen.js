@@ -18,6 +18,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import * as userActions from '../../redux/actions/user';
 import {bindActionCreators} from 'redux';
+import API_BASE_URL from '../../../config';
 
 const width = Dimensions.get('screen').width;
 const height = Dimensions.get('screen').height;
@@ -28,7 +29,7 @@ const {
 const SplashScreen = props => {
   const checkCredentials = async () => {
     let credentials = await AsyncStorage.getItem('@usercredentials');
-    console.log(credentials);
+    console.log(credentials, 'credentials');
     if (credentials == null) {
       setTimeout(() => {
         setTimeout(() => {
@@ -41,7 +42,7 @@ const SplashScreen = props => {
   };
   const login = async credentials => {
     const response = await axios.post(
-      'http://192.168.1.115:3000/login',
+      `${API_BASE_URL}/nodeapp/login`,
       JSON.parse(credentials),
     );
     if (response.status === 200) {

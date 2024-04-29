@@ -1,59 +1,49 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Dimensions,
-  StatusBar,
-  ImageBackground,
-} from 'react-native';
+// HomeScreen.js
 
-{
-  /* {---------------Redux Imports------------} */
-}
-import {connect} from 'react-redux';
-import * as userActions from '../../redux/actions/user';
-import {bindActionCreators} from 'redux';
+import React, {useEffect, useState} from 'react';
+import {View, StyleSheet, BackHandler} from 'react-native';
 import Header from '../../components/Header';
-import {Icon} from 'react-native-elements';
 import CustomCard from '../../components/CustomCard';
-
-const width = Dimensions.get('screen').width;
-const height = Dimensions.get('screen').height;
+import Drawer from '../../components/Drawer';
+import {useNavigation} from '@react-navigation/native';
 
 const HomeScreen = props => {
+  const [isDrawerOpen, setDrawerOpen] = useState(false);
 
+  const toggleDrawer = () => {
+    setDrawerOpen(!isDrawerOpen);
+  };
+
+  const closeDrawer = () => {
+    setDrawerOpen(false);
+  };
+  const navigation = useNavigation();
+  useEffect(() => {
+    const backAction = () => {
+      BackHandler.exitApp();
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   return (
-    <ImageBackground
-      source={require('../../Assets/images/cardbackground.jpg')}
-      style={{flex: 1, backgroundColor:'black'}}
-      resizeMode="cover">
-      <View style={styles.container}>
-        <Header />
-        <CustomCard navigation={props.navigation} />
-      </View>
-    </ImageBackground>
+    <View style={styles.container}>
+      <Header toggleDrawer={toggleDrawer} />
+      {isDrawerOpen && <Drawer onClose={closeDrawer} navigation={navigation} />}
+      <CustomCard navigation={props.navigation} />
+    </View>
   );
 };
-{
-  /* {---------------redux State ------------} */
-}
-const mapStateToProps = state => ({
-  userData: state.userData,
-});
-const ActionCreators = Object.assign({}, userActions);
-const mapDispatchToProps = dispatch => ({
-  actions: bindActionCreators(ActionCreators, dispatch),
-});
-export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-    // backgroundColor: '',
-    // width: width,
-    // height: height,
+    backgroundColor: '#fff',
   },
 });
+
+export default HomeScreen;

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,11 +10,16 @@ import {
   Alert,
   ImageBackground,
   ScrollView,
+  BackHandler,
 } from 'react-native';
 import axios from 'axios';
+import LinearGradient from 'react-native-linear-gradient';
 import {SelectList} from 'react-native-dropdown-select-list';
 import CustomDropdown from '../../components/CustomList';
 import {Icon} from 'react-native-elements';
+import API_BASE_URL from '../../../config';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import CustomAlert from '../../components/CustomAlert';
 
 // Inside your SignUp component render function
 
@@ -28,229 +33,230 @@ const SignUp = (props, navigation) => {
   // const [currentValue, setCurrentValue] = useState(null);
   const [name, setName] = useState('');
   const [mobileNo, setMobileNo] = useState('');
-  const [department, setDepartment] = useState('');
+  const [department, setDepartment] = useState('Support');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] =
+    useState(false);
+  const [errorMessage, setErrorMessage] = useState(''); // State to manage error message
+  const [showAlert, setShowAlert] = useState(false);
   const data = [
     {key: '1', value: 'Admin'},
     {key: '2', value: 'Support'},
   ];
 
   const handleSubmit = async () => {
+    if (!name.trim() || !email.trim() || !password.trim() || !mobileNo.trim()) {
+      // Alert.alert('Error', 'Please fill in all fields');
+      setErrorMessage('Please fill in all fields');
+      setShowAlert(true);
+      return;
+    }
     if (name.trim() === '') {
-      Alert.alert('Error', 'Please enter your name.');
+      // Alert.alert('Error', 'Please enter your name.');
+      setErrorMessage('Please enter your name.');
+      setShowAlert(true);
       return;
     }
     if (!email.includes('@') || !email.includes('.')) {
-      Alert.alert('Error', 'Please enter a valid email address.');
+      // Alert.alert('Error', 'Please enter a valid email address.');
+      setErrorMessage('Please enter a valid email address.');
+      setShowAlert(true);
+      return;
+    }
+    if (password !== confirmPassword) {
+      // Alert.alert('Error', 'Password and Confirm Password do not match.');
+      setErrorMessage('Password and Confirm Password do not match.');
+      setShowAlert(true);
       return;
     }
     if (password.length < 8) {
-      Alert.alert('Error', 'Password must be at least 8 characters long.');
+      // Alert.alert('Error', 'Password must be at least 8 characters long.');
+      setErrorMessage('Password must be at least 8 characters long.');
+      setShowAlert(true);
       return;
     }
     if (mobileNo.length !== 11) {
-      Alert.alert('Error', 'Please enter a valid 11-digit mobile number.');
+      // Alert.alert('Error', 'Please enter a valid 11-digit mobile number.');
+      setErrorMessage('Please enter a valid 11-digit mobile number.');
+      setShowAlert(true);
       return;
     }
+
     try {
       const userData = {name, email, password, mobileNo, department};
-
       const response = await axios.post(
-        'http://192.168.1.115:3000/register',
+        `${API_BASE_URL}/nodeapp/register`,
         userData,
       );
-      console.log(userData, 'checking');
+
       if (response.status === 200) {
-        props.navigation.navigate('Login');
-        Alert.alert('Success', 'User registered successfully.');
-        setName('');
-        setEmail('');
-        setMobileNo('');
-        setDepartment('');
-        setPassword('');
+        if (
+          response.data.status === 'error' &&
+          response.data.message === 'User already exists'
+        ) {
+          // Alert.alert(
+          //   'Error',
+          //   'User with this email already exists. Please try another email.',
+          // );
+          setErrorMessage(
+            'User with this email already exists. Please try another email.',
+          );
+          setShowAlert(true);
+        } else {
+          // Proceed with successful registration
+          props.navigation.navigate('Login');
+          // Alert.alert('Success', 'User registered successfully.');
+          setErrorMessage('Success', 'User registered successfully.');
+          setShowAlert(true);
+          setName('');
+          setEmail('');
+          setMobileNo('');
+          setDepartment('');
+          setPassword('');
+        }
       } else {
+        // Handle unexpected response status
         console.error(
           'Registration failed: Unexpected response status',
           response.status,
         );
-        Alert.alert(
-          'Error',
-          'Failed to register user. Please try again later.',
-        );
+        // Alert.alert(
+        //   'Error',
+        //   'Failed to register user. Please try again later.',
+        // );
+        setErrorMessage('Failed to register user. Please try again later.');
+        setShowAlert(true);
       }
     } catch (error) {
       console.error('Registration failed:', error.response.data.message);
-      Alert.alert('Error', 'Failed to register user. Please try again later.');
+      // Alert.alert('Error', 'Failed to register user. Please try again later.');
+      setErrorMessage('Failed to register user. Please try again later.');
+      setShowAlert(true);
     }
   };
-
-  // const sendVerificationEmail = async email => {
-  //   try {
-  //     const response = await axios.post(
-  //       'http://192.168.1.103:3000/send-verification-email',
-  //       {email},
-  //     );
-  //     if (response.status !== 200) {
-  //       console.error('Failed to send verification email');
-  //     }
-  //   } catch (error) {
-  //     console.error('Failed to send verification email:', error);
-  //   }
-  // };
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
+  };
+  useEffect(() => {
+    const backAction = () => {
+      props.navigation.goBack(); // Navigate back when the back button is pressed
+      return true; // Prevent default behavior
+    };
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
   return (
-    <View style={styles.container}>
-      <View
-        style={{
-          width: width,
-          height: height,
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-        <View
-          style={{
-            alignSelf: 'flex-start',
-            top: 90,
-            left: 20,
-            borderWidth: 1,
-            borderRadius: 10,
-          }}>
-          <Icon
-            type="material-community"
-            name="arrow-left"
-            size={42}
-            onPress={() => {
-              props.navigation.goBack();
-            }}
-          />
-        </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.background}>
         <Image
           source={require('../../Assets/images/launch_screen.jpg')}
-          style={{height: 200, width: 200, marginLeft: 0}}
+          style={styles.logo}
           resizeMode="contain"
         />
-        <Text style={styles.headText}>SIGN-UP</Text>
-        <View style={{marginBottom: 30}}>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Icon name="person" type="material" color={'black'} size={26} />
-            <TextInput
-              placeholder="Name"
-              placeholderTextColor={'black'}
-              style={styles.textInput1}
-              value={name}
-              onChangeText={text => {
-                setName(text);
-              }}
-            />
-          </View>
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Icon name="mail" size={26} color={'black'} />
-            <TextInput
-              placeholder="Email"
-              placeholderTextColor={'black'}
-              style={styles.textInput1}
-              value={email}
-              onChangeText={text => {
-                setEmail(text);
-              }}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-around',
-              marginRight: 10,
-            }}>
-            <Icon
-              type="material-commuity"
-              name="lock-open"
-              color={'black'}
-              size={28}
-              style={{marginRight: 8}}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                borderWidth: 1,
-                flex: 1,
-                marginTop: 10,
-                borderRadius: 5,
-                marginBottom: 10,
-              }}>
-              <TextInput
-                placeholder="Password"
-                style={{
-                  flex: 1,
-                  color: 'black',
-                  marginLeft: 5,
-                  fontWeight: '400',
-                  fontSize: 16,
-                }}
-                placeholderTextColor={'black'}
-                value={password}
-                onChangeText={text => {
-                  setPassword(text);
-                }}
-                secureTextEntry={!isPasswordVisible}
-              />
-              <TouchableOpacity onPress={togglePasswordVisibility}>
-                <Icon
-                  name={isPasswordVisible ? 'visibility-off' : 'visibility'}
-                  type="material"
-                  color={'black'}
-                  style={{marginRight: 10}}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Icon name="phone" size={26} color={'black'} />
-            <TextInput
-              placeholder="Mobile No"
-              placeholderTextColor={'black'}
-              style={styles.textInput1}
-              value={mobileNo}
-              onChangeText={text => {
-                setMobileNo(text);
-              }}
-              keyboardType="numeric"
-              maxLength={11}
-            />
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-            }}>
-            <Icon
-              name="people"
-              type="material-icons"
-              size={26}
-              color={'black'}
-            />
-            <CustomDropdown
-              options={data}
-              onSelect={val => {
-                setDepartment(val);
-              }}
-              dropDownStyle={{color: 'black', height: 100}} // Adjust the height as needed
-            />
-          </View>
-        </View>
-        <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
-          <Text style={styles.button1}>Sign-up</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+      <View style={styles.formContainer}>
+        <CustomAlert
+          visible={showAlert}
+          message={errorMessage}
+          onClose={() => setShowAlert(false)}
+          type={errorMessage.startsWith('Success') ? 'success' : 'error'}
+        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Name"
+            style={styles.textInput}
+            placeholderTextColor={'black'}
+            value={name}
+            onChangeText={setName}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            style={styles.textInput}
+            placeholderTextColor={'black'}
+            value={email}
+            onChangeText={setEmail}
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Password"
+            style={styles.textInput}
+            placeholderTextColor={'black'}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!isPasswordVisible}
+          />
+          <TouchableOpacity
+            onPress={togglePasswordVisibility}
+            style={styles.visibilityIcon}>
+            <Icon
+              name={isPasswordVisible ? 'visibility-off' : 'visibility'}
+              type="material"
+              color={'black'}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Confirm Password"
+            style={styles.textInput}
+            placeholderTextColor={'black'}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry={!isConfirmPasswordVisible}
+          />
+          <TouchableOpacity
+            onPress={toggleConfirmPasswordVisibility}
+            style={styles.visibilityIcon}>
+            <Icon
+              name={isConfirmPasswordVisible ? 'visibility-off' : 'visibility'}
+              type="material"
+              color={'black'}
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Mobile No"
+            style={styles.textInput}
+            placeholderTextColor={'black'}
+            value={mobileNo}
+            onChangeText={setMobileNo}
+            keyboardType="numeric"
+            maxLength={11}
+          />
+        </View>
+        <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainer}>
+          <LinearGradient
+            colors={['#EE5C25', '#000']} // Adjust the second color to a lighter shade of black
+            locations={[0.1, 0.9]} // Adjust the gradient position as needed
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            style={[styles.button, {borderRadius: 50}]}>
+            <Text style={[styles.buttonText, {color: 'white'}]}>Sign Up</Text>
+          </LinearGradient>
+        </TouchableOpacity>
+        <View style={styles.bottomContainer}>
+          <Text style={styles.signUpText}>Already have an account? </Text>
+          <TouchableOpacity onPress={() => props.navigation.navigate('Login')}>
+            <Text style={styles.createBtn}> Login</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -258,67 +264,73 @@ export default SignUp;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
+    flexGrow: 1,
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
     justifyContent: 'center',
-    width: width,
-    height: height,
   },
-  headText: {
-    fontWeight: '700',
-    fontSize: 30,
-    letterSpacing: 1,
-    color: 'black',
-    marginBottom: 25,
-    alignSelf: 'center',
-    // marginTop: -20,
-    // marginLeft: 30,
+  background: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  textInput1: {
-    borderColor: 'black',
-    borderWidth: 1,
-    width: 350,
-    borderRadius: 5,
-    padding: 10,
-    margin: 10,
-    fontWeight: '400',
-    fontSize: 16,
+  logo: {
+    height: 180,
+    width: 180,
+    marginBottom: 10,
+  },
+  formContainer: {
+    backgroundColor: '#f2f2f2',
+    borderRadius: 15,
+    padding: 20,
+    marginBottom: 80,
+  },
+  inputLabel: {
     color: 'black',
+    marginBottom: 5,
+    fontWeight: 'bold',
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    borderRadius: 50,
+    marginBottom: 20,
+  },
+  textInput: {
+    flex: 1,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    color: 'black',
+  },
+  visibilityIcon: {
+    padding: 15,
   },
   buttonContainer: {
-    backgroundColor: 'black',
-    borderRadius: 10,
-    padding: 10,
-    alignSelf: 'flex-end',
-    width: 90,
-    marginRight: 35,
-    // marginTop: 20,
-    marginBottom: 120,
+    marginTop: 10,
+    width: '100%',
+    justifyContent: 'center',
   },
-  button1: {
-    fontSize: 18,
-    alignSelf: 'center',
-    fontWeight: '500',
-    color: 'white',
-  },
-  dropDownPicker: {
-    width: 370,
-    height: 100,
-    margin: 10,
-    backgroundColor: 'transparent',
-    borderColor: '',
-    borderRadius: 5,
-  },
-  dropDownContainer: {
-    height: 500,
-    width: 350,
-    marginTop: 1,
+  button: {
+    borderRadius: 50,
+    padding: 15,
     alignItems: 'center',
-    borderColor: 'black',
-    backgroundColor: '#EE5C25',
+    marginBottom: 20,
   },
-  dropDownText: {
+  buttonText: {
+    fontWeight: 'bold',
+  },
+  bottomContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  signUpText: {
+    fontWeight: '400',
     color: 'black',
-    fontWeight: '600',
+  },
+  createBtn: {
+    color: '#EE5C25',
+    fontWeight: '500',
+    textDecorationLine: 'underline',
   },
 });
