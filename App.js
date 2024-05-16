@@ -77,6 +77,11 @@ const App = ({navigation}) => {
             component={ProfileScreen}
             options={{headerShown: false}}
           />
+          <Stack.Screen
+            name="ResetPasswordScreen"
+            component={ResetPasswordScreen}
+            options={{headerShown: false}}
+          />
           {/* <Stack.Screen
             name="Practice"
             component={PracticeReactNative}
@@ -107,11 +112,6 @@ const App = ({navigation}) => {
             component={Api}
             options={{headerShown: false}}
           /> */}
-          <Stack.Screen
-            name="ResetPasswordScreen"
-            component={ResetPasswordScreen}
-            options={{headerShown: false}}
-          />
         </Stack.Navigator>
       </NavigationContainer>
     </>

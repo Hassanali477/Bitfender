@@ -16,7 +16,7 @@ import configureStore from './src/redux/store/configureStore';
 const store = configureStore();
 const RNRedux = () => (
   <Provider store={store}>
-    <App />
+    <App /> 
   </Provider>
 );
 Text.defaultProps = Text.defaultProps || {};

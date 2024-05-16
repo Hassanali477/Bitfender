@@ -442,61 +442,65 @@ const CreateScreen = props => {
             <Text style={styles.errorText}>{totalPriceError}</Text>
           ) : null} */}
           <View style={{flexDirection: 'row'}}>
-            <View
-              style={[
-                styles.inputContainer,
-                dateOfIssuanceError && styles.errorInput,
-              ]}>
-              <TextInput
-                placeholder="Date Of Issuance"
-                style={[styles.inputField, {width: 150, padding: 10}]}
-                placeholderTextColor="#ccc"
-                editable={false}
-                value={dateOfIssuance}
-                onChangeText={() => {
-                  setDateOfIssuance('');
-                  setDateOfIssuanceError('');
-                }}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  openCalendar(1);
-                }}
-                style={styles.calendarButton}>
-                <Image
-                  source={require('../Assets/images/calendar.png')}
-                  style={styles.calendarIcon}
+            <TouchableWithoutFeedback onPress={() => setShowCalendar1(false)}>
+              <View
+                style={[
+                  styles.inputContainer,
+                  dateOfIssuanceError && styles.errorInput,
+                ]}>
+                <TextInput
+                  placeholder="Date Of Issuance"
+                  style={[styles.inputField, {width: 150, padding: 10}]}
+                  placeholderTextColor="#ccc"
+                  editable={false}
+                  value={dateOfIssuance}
+                  onChangeText={() => {
+                    setDateOfIssuance('');
+                    setDateOfIssuanceError('');
+                  }}
                 />
-              </TouchableOpacity>
-            </View>
-            <View
-              style={[
-                styles.inputContainer,
-                dateOfExpiryError && styles.errorInput,
-                {marginLeft: 20},
-              ]}>
-              <TextInput
-                placeholder="Date Of Expiry"
-                style={[styles.inputField, {width: 150, padding: 10}]}
-                placeholderTextColor="#ccc"
-                editable={false}
-                value={dateOfExpiry}
-                onChangeText={() => {
-                  setDateOfExpiry('');
-                  setDateOfExpiryError('');
-                }}
-              />
-              <TouchableOpacity
-                onPress={() => {
-                  openCalendar(2);
-                }}
-                style={styles.calendarButton}>
-                <Image
-                  source={require('../Assets/images/calendar.png')}
-                  style={styles.calendarIcon}
+                <TouchableOpacity
+                  onPress={() => {
+                    openCalendar(1);
+                  }}
+                  style={styles.calendarButton}>
+                  <Image
+                    source={require('../Assets/images/calendar.png')}
+                    style={styles.calendarIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={() => setShowCalendar2(false)}>
+              <View
+                style={[
+                  styles.inputContainer,
+                  dateOfExpiryError && styles.errorInput,
+                  {marginLeft: 20},
+                ]}>
+                <TextInput
+                  placeholder="Date Of Expiry"
+                  style={[styles.inputField, {width: 150, padding: 10}]}
+                  placeholderTextColor="#ccc"
+                  editable={false}
+                  value={dateOfExpiry}
+                  onChangeText={() => {
+                    setDateOfExpiry('');
+                    setDateOfExpiryError('');
+                  }}
                 />
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  onPress={() => {
+                    openCalendar(2);
+                  }}
+                  style={styles.calendarButton}>
+                  <Image
+                    source={require('../Assets/images/calendar.png')}
+                    style={styles.calendarIcon}
+                  />
+                </TouchableOpacity>
+              </View>
+            </TouchableWithoutFeedback>
           </View>
 
           {/* <View style={styles.inputContainer}> */}

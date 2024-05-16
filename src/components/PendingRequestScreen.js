@@ -81,7 +81,6 @@ const PendingRequestScreen = props => {
         DateOfExpiry: item.DateOfExpiry,
         AccountManagerName: item.AccountManagerName,
       });
-
       setPendingRequests(pendingRequests.filter(req => req._id !== item._id));
     } catch (error) {
       console.error('Error:', error.response.data.message);
@@ -105,14 +104,8 @@ const PendingRequestScreen = props => {
         DateOfExpiry: item.DateOfExpiry,
         AccountManagerName: item.AccountManagerName,
       });
-
-      // Remove the rejected request from the pendingRequests array
+      
       setPendingRequests(pendingRequests.filter(req => req._id !== item._id));
-
-      // Navigate to the RejectScreen and pass the rejected request data
-      // navigation.navigate('RejectScreen', {
-      //   rejectedRequestsData: item,
-      // });
     } catch (error) {
       console.error('Error:', error);
     }

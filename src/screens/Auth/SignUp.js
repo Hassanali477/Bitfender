@@ -78,9 +78,9 @@ const SignUp = (props, navigation) => {
       setShowAlert(true);
       return;
     }
-    if (mobileNo.length !== 11) {
+    if (mobileNo.length === '') {
       // Alert.alert('Error', 'Please enter a valid 11-digit mobile number.');
-      setErrorMessage('Please enter a valid 11-digit mobile number.');
+      setErrorMessage('Please enter a mobile number.');
       setShowAlert(true);
       return;
     }
@@ -109,7 +109,7 @@ const SignUp = (props, navigation) => {
           // Proceed with successful registration
           props.navigation.navigate('Login');
           // Alert.alert('Success', 'User registered successfully.');
-          setErrorMessage('Success', 'User registered successfully.');
+          setErrorMessage('User registered successfully.');
           setShowAlert(true);
           setName('');
           setEmail('');
@@ -170,7 +170,11 @@ const SignUp = (props, navigation) => {
           visible={showAlert}
           message={errorMessage}
           onClose={() => setShowAlert(false)}
-          type={errorMessage.startsWith('Success') ? 'success' : 'error'}
+          type={
+            errorMessage.startsWith('User registered successfull')
+              ? 'success'
+              : 'error'
+          }
         />
         <View style={styles.inputContainer}>
           <TextInput
@@ -236,7 +240,6 @@ const SignUp = (props, navigation) => {
             value={mobileNo}
             onChangeText={setMobileNo}
             keyboardType="numeric"
-            maxLength={11}
           />
         </View>
         <TouchableOpacity onPress={handleSubmit} style={styles.buttonContainer}>
