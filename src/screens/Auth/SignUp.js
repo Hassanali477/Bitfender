@@ -97,18 +97,12 @@ const SignUp = (props, navigation) => {
           response.data.status === 'error' &&
           response.data.message === 'User already exists'
         ) {
-          // Alert.alert(
-          //   'Error',
-          //   'User with this email already exists. Please try another email.',
-          // );
           setErrorMessage(
             'User with this email already exists. Please try another email.',
           );
           setShowAlert(true);
         } else {
-          // Proceed with successful registration
           props.navigation.navigate('Login');
-          // Alert.alert('Success', 'User registered successfully.');
           setErrorMessage('User registered successfully.');
           setShowAlert(true);
           setName('');

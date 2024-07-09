@@ -30,7 +30,7 @@ const ProfileScreen = props => {
   const [name, setName] = useState(props.userData?.user?.name);
   const [email, setEmail] = useState(props.userData?.user?.email);
   const [mobileNo, setMobileNo] = useState(
-    props.userData?.user?.mobileNo.toString(),
+    props.userData?.user?.mobileNo,
   );
   const [department, setDepartment] = useState(
     props.userData?.user?.department,

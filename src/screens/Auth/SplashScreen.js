@@ -27,44 +27,44 @@ const {
 } = NativeModules;
 
 const SplashScreen = props => {
-  const checkCredentials = async () => {
-    let credentials = await AsyncStorage.getItem('@usercredentials');
-    console.log(credentials, 'credentials');
-    if (credentials == null) {
-      setTimeout(() => {
-        setTimeout(() => {
-          props.navigation.navigate('Login');
-        }, 10);
-      }, 2000);
-    } else {
-      login(credentials);
-    }
-  };
-  const login = async credentials => {
-    const response = await axios.post(
-      `${API_BASE_URL}/nodeapp/login`,
-      JSON.parse(credentials),
-    );
-    if (response.status === 200) {
-      console.log('Login successful', response.data);
-      const token = response.data.token;
-      const user = response.data.userData;
-
-      var {actions} = props;
-      actions.userToken(token);
-      actions.user(user);
-      props.navigation.navigate('Home');
-    } else {
-      console.error(
-        'Login failed: Unexpected response status',
-        response.status,
-      );
-      props.navigation.navigate('Login');
-      Alert.alert('Error', 'Unexpected response from server');
-    }
-  };
+  // const checkCredentials = async () => {
+  //   let credentials = await AsyncStorage.getItem('@usercredentials');
+  //   console.log(credentials, 'credentials');
+  //   if (credentials == null) {
+  //     setTimeout(() => {
+  //       setTimeout(() => {
+  //         props.navigation.navigate('Login');
+  //       }, 10);
+  //     }, 2000);
+  //   } else {
+  //     login(credentials);
+  //   }
+  // };
+  // const login = async credentials => {
+  //   const response = await axios.post(
+  //     `${API_BASE_URL}/nodeapp/login`,
+  //     JSON.parse(credentials),
+  //   );
+  //   if (response.status === 200) {
+  //     console.log('Login successful', response.data);
+  //     const token = response.data.token;
+  //     const user = response.data.userData;
+  //     var {actions} = props;
+  //     actions.userToken(token);
+  //     actions.user(user);
+  //     props.navigation.navigate('Home');
+  //   } else {
+  //     console.error(
+  //       'Login failed: Unexpected response status',
+  //       response.status,
+  //     );
+  //     props.navigation.navigate('Login');
+  //     Alert.alert('Error', 'Unexpected response from server');
+  //   }
+  // };
   useEffect(() => {
-    checkCredentials();
+    props.navigation.navigate('Login');
+    // checkCredentials();
   }, []);
   return (
     <ImageBackground
@@ -101,6 +101,5 @@ const styles = StyleSheet.create({
     height: height,
     alignItems: 'center',
     justifyContent: 'center',
-    // backgroundColor: '#EE5C25',
   },
 });

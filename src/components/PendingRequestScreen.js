@@ -16,10 +16,9 @@ import * as userActions from '../redux/actions/user';
 import {bindActionCreators} from 'redux';
 import LinearGradient from 'react-native-linear-gradient';
 import API_BASE_URL from '../../config';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const PendingRequestScreen = props => {
-
   // const navigation = useNavigation();
   useEffect(() => {
     const backAction = () => {
@@ -104,7 +103,7 @@ const PendingRequestScreen = props => {
         DateOfExpiry: item.DateOfExpiry,
         AccountManagerName: item.AccountManagerName,
       });
-      
+
       setPendingRequests(pendingRequests.filter(req => req._id !== item._id));
     } catch (error) {
       console.error('Error:', error);

@@ -18,7 +18,7 @@ import {Icon} from 'react-native-elements';
 
 const {width, height} = Dimensions.get('screen');
 
-const Drawer = (props, {onClose}) => {
+const Drawer = (props) => {
   const closeDrawer = () => {
     props.onClose();
   };

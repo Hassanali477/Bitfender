@@ -41,101 +41,98 @@ const Login = props => {
   //   console.log('Remember me checkbox pressed');
   //   setRememberMe(!rememberMe);
   // };
-  const handleLogin = async () => {
-    if (!email.trim() || !password.trim()) {
-      // Alert.alert('Error', 'Please fill in all fields');
-      setErrorMessage('Please fill in all fields');
-      setShowAlert(true);
-      return;
-    }
-    if (password.length < 8) {
-      // Alert.alert('Error', 'Password must be at least 8 characters');
-      setErrorMessage('Password must be at least 8 characters');
-      setShowAlert(true);
-      return;
-    }
-    try {
-      const userData = {
-        email: email,
-        password: password,
-      };
-      setIsLoading(true);
-      const response = await axios.post(
-        `${API_BASE_URL}/nodeapp/login`,
-        userData,
-      );
-      setIsLoading(false);
+  // const handleLogin = async () => {
+  //   if (!email.trim() || !password.trim()) {
+  //     // Alert.alert('Error', 'Please fill in all fields');
+  //     setErrorMessage('Please fill in all fields');
+  //     setShowAlert(true);
+  //     return;
+  //   }
+  //   if (password.length < 8) {
+  //     // Alert.alert('Error', 'Password must be at least 8 characters');
+  //     setErrorMessage('Password must be at least 8 characters');
+  //     setShowAlert(true);
+  //     return;
+  //   }
+  //   try {
+  //     const userData = {
+  //       email: email,
+  //       password: password,
+  //     };
+  //     setIsLoading(true);
+  //     const response = await axios.post(
+  //       `${API_BASE_URL}/nodeapp/login`,
+  //       userData,
+  //     );
+  //     setIsLoading(false);
 
-      if (response.status === 200) {
-        console.log('Login successful', response.data);
-        const token = response.data.token;
-        const user = response.data.userData;
-        if (user && user.name) {
-          var {actions} = props;
-          AsyncStorage.setItem(
-            '@usercredentials',
-            JSON.stringify({
-              email: email,
-              password: password,
-            }),
-          );
-          actions.userToken(token);
-          actions.user(user);
-          props.navigation.navigate('Home');
-        } else {
-          console.error('Login failed: User data incomplete');
-          // Alert.alert('Error', 'Invalid user data received');
-          setErrorMessage('Invalid user data received');
-          setShowAlert(true);
-          setIsLoading(false);
-        }
-      } else {
-        console.error(
-          'Login failed: Unexpected response status',
-          response.status,
-        );
-        // Alert.alert('Error', 'Unexpected response from server');
-        setErrorMessage('Unexpected response from server');
-        setShowAlert(true);
-        setIsLoading(false);
-      }
-    } catch (error) {
-      console.error('Login failed', error);
-      // Alert.alert('Incorrect password', 'Incorrect email and password.');
-      setErrorMessage('Incorrect email and password.');
-      setShowAlert(true);
-      setIsLoading(false);
-    }
-  };
+  //     if (response.status === 200) {
+  //       console.log('Login successful', response.data);
+  //       const token = response.data.token;
+  //       const user = response.data.userData;
+  //       if (user && user.name) {
+  //         var {actions} = props;
+  //         AsyncStorage.setItem(
+  //           '@usercredentials',
+  //           JSON.stringify({
+  //             email: email,
+  //             password: password,
+  //           }),
+  //         );
+  //         actions.userToken(token);
+  //         actions.user(user);
+  //         props.navigation.navigate('Home');
+  //       } else {
+  //         console.error('Login failed: User data incomplete');
+  //         setErrorMessage('Invalid user data received');
+  //         setShowAlert(true);
+  //         setIsLoading(false);
+  //       }
+  //     } else {
+  //       console.error(
+  //         'Login failed: Unexpected response status',
+  //         response.status,
+  //       );
+  //       setErrorMessage('Unexpected response from server');
+  //       setShowAlert(true);
+  //       setIsLoading(false);
+  //     }
+  //   } catch (error) {
+  //     console.error('Login failed', error);
+  //     setErrorMessage('Incorrect email and password.');
+  //     setShowAlert(true);
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const togglePasswordVisibility = () => {
     setIsPasswordVisible(!isPasswordVisible);
   };
 
-  useEffect(() => {
-    const backAction = () => {
-      BackHandler.exitApp();
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+  // useEffect(() => {
+  //   const backAction = () => {
+  //     BackHandler.exitApp();
+  //     return true;
+  //   };
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction,
+  //   );
 
-    return () => backHandler.remove();
-  }, []);
-  useEffect(() => {
-    // Effect to handle back button press
-    const backAction = () => {
-      return true; // Prevent default behavior
-    };
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+  //   return () => backHandler.remove();
+  // }, []);
+  // useEffect(() => {
+  //   // Effect to handle back button press
+  //   const backAction = () => {
+  //     return true; // Prevent default behavior
+  //   };
+  //   const backHandler = BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     backAction,
+  //   );
 
-    return () => backHandler.remove(); // Cleanup the event listener
-  }, []);
+  //   return () => backHandler.remove(); // Cleanup the event listener
+  // }, []);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -216,7 +213,7 @@ const Login = props => {
           </TouchableOpacity>
         </View>
         <TouchableOpacity
-          onPress={handleLogin}
+          onPress={() => props.navigation.navigate('Home')}
           style={[
             styles.buttonContainer,
             {borderBottomWidth: 1, borderBottomColor: 'black'},
